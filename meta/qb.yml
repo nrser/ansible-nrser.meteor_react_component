@@ -6,7 +6,7 @@
 
 # prefix for role variables
 # use a shorter name 
-var_prefix: 'component'
+var_prefix: component
 
 # how to get a default for `dir` if it's not provided as the 
 default_dir: false
@@ -30,17 +30,20 @@ vars:
   description: component class name
   required: true
   type: string
-  short: c
+  short: n
 
 - name: data
   description: add ReactDataMixin
-  required: false
   type: boolean
   short: m
 
+- name: container
+  description: create a data container
+  type: boolean
+  short: c
+
 - name: root
   description: root element name
-  required: false
   type: string
   short: r
 
@@ -48,30 +51,21 @@ vars:
   description: >
     register class name as a global Blaze template helper and create
     a .html template for the component.
-  required: false
   type: boolean
   short: b
 
 - name: force
   description: overwrite existing file
-  required: false
   type: boolean
   short: f
 
 - name: index_import
   description: create an export * line for this component in imports/ui/index.js
-  required: false
-  type: boolean
-
-- name: default
-  description: if true exports the component as the default from the module
-  required: false
   type: boolean
 
 - name: stylesheet
   description: >
     when true generates a <component-name>.import.less file next to the 
     component and imports it in client/styles/index.less
-  required: false
   type: boolean
   

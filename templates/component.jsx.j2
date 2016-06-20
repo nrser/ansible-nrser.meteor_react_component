@@ -8,7 +8,7 @@ import * as Util from 'meteor/nrser:util';
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 {% if component_data -%}
-import { createContainer, ReactMeteorData } from 'meteor/react-meteor-data';
+import { ReactMeteorData } from 'meteor/react-meteor-data';
 import reactMixin from 'react-mixin';  
 {% endif %}
 
@@ -21,15 +21,20 @@ import './{{ component_class }}.html';
 // other package imports
 
 // project imports
-
-// other component imports
-import {
-  
-} from '/imports/ui';
+import * as UI from '/imports/ui';
+import { } from '/imports/collections';
 
 const log = Util.logger('{{ component_logger_name }}');
 
-export {% if component_default %}default {% endif %}class {{ component_class }} extends Component {
+export class {{ component_class }} extends Component {
+  static propTypes = {
+    
+  }; // propTypes
+  
+  static defaultProps = {
+    
+  }; // defaultProps
+  
   constructor() {
     super();
   } // constructor()
@@ -50,14 +55,9 @@ export {% if component_default %}default {% endif %}class {{ component_class }} 
   // render methods
   // ==============
   
-  renderContent() {
-    
-  } // renderContent()
-  
   render() {
     return (
       <{{ component_root }} className="{{ component_class }}">
-        { this.renderContent() }
       </{{ component_root }}>
     );
   } // render()
@@ -67,10 +67,6 @@ export {% if component_default %}default {% endif %}class {{ component_class }} 
   
 } // {{ component_class }}
 
-{{ component_class }}.propTypes = {
-  
-} // propTypes
-
 {% if component_data -%}
 // mixin that calls `component.getMeteorData()`
 reactMixin({{ component_class}}.prototype, ReactMeteorData);
@@ -78,7 +74,5 @@ reactMixin({{ component_class}}.prototype, ReactMeteorData);
 
 {% if component_blaze -%}
 // register component globally to be used by Blaze
-Template.registerHelper('{{ component_class }}', () => {
-  return {{ component_class }};
-});
+Template.registerHelper('{{ component_class }}', () => {{ component_class }});
 {% endif %}
