@@ -5,8 +5,9 @@ import { check, match, Match } from 'meteor/nrser:util';
 import * as Util from 'meteor/nrser:util';
 
 // react imports
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+import { BaseComponent } from '/imports/ui/components/lib/BaseComponent.jsx';
 {% if component_data -%}
 import { ReactMeteorData } from 'meteor/react-meteor-data';
 import reactMixin from 'react-mixin';  
@@ -26,7 +27,7 @@ import { } from '/imports/collections';
 
 const log = Util.logger('{{ component_logger_name }}');
 
-export class {{ component_class }} extends Component {
+export class {{ component_class }} extends BaseComponent {
   static propTypes = {
     
   }; // propTypes
@@ -35,8 +36,8 @@ export class {{ component_class }} extends Component {
     
   }; // defaultProps
   
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   } // constructor()
   
   {% if component_data -%}
@@ -49,7 +50,7 @@ export class {{ component_class }} extends Component {
   // helper methods
   // ==============
   
-  // action methods
+  // event handlers
   // ==============
   
   // render methods
