@@ -52,7 +52,7 @@
       def add dest_rel_path, line_rel_path
         $imports << {
           dest: to_path($prefix, dest_rel_path),
-          line: %Q(@import "#{ to_path '.', line_rel_path }";),
+          line: "@import '#{ to_path '.', line_rel_path }';",
         }
       end
       
