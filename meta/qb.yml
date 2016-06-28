@@ -20,19 +20,14 @@ vars:
 #   required: false
 #   type: boolean # boolean (default) | string
 #   short: e
-- name: dir
-  description: directory under imports/ui that the component goes in
-  required: true
-  type: string
-  short: d
 
-- name: class
-  description: component class name
+- name: name
+  description: component name
   required: true
   type: string
   short: n
 
-- name: data
+- name: react_data_mixin
   description: add ReactDataMixin
   type: boolean
   short: m
@@ -59,13 +54,12 @@ vars:
   type: boolean
   short: f
 
-- name: index_import
-  description: create an export * line for this component in imports/ui/index.js
+- name: import
+  description: add the javascript import statements for the component
   type: boolean
 
-- name: stylesheet
+- name: less
   description: >
-    when true generates a <component-name>.import.less file next to the 
-    component and imports it in client/styles/index.less
+    generate a .import.less file and add include statements for it.
   type: boolean
   

@@ -3,5 +3,6 @@
 
 allow_duplicates: yes
 
-dependencies: []
+dependencies:
 # - role: role-name
+- role: nrser.rb

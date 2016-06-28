@@ -1,53 +1,49 @@
----
+---  
+- name: set the name elements
+  set_fact:
+    component_name_elements: "{{ component_name.split('.') }}"
+
+- name: set the class name
+  set_fact:
+    component_class: "{{ component_name_elements[-1] }}"
+
+- name: set the filepath
+  set_fact:
+    component_filepath: "{{ qb_dir }}/imports/ui/{{ component_name_elements | join('/') }}.jsx"
+
+- name: set the directory
+  set_fact:
+    component_dir: "{{ component_filepath | dirname }}"
+
 - name: set logger name
   set_fact:
     component_logger_name: "imports:ui:{{ component_dir | regex_replace('/', ':')}}:{{ component_class }}"
-    component_path: "{{ qb_dir }}/imports/ui/{{ component_dir }}/{{ component_class }}.jsx"
-    component_style_path: "{{ qb_dir }}/imports/ui/{{ component_dir }}/{{ component_class }}.import.less"
+
+- name: set the css class name
+  set_fact:
+    component_css_class: "{{ component_name_elements | join(' ') }}"
 
 - name: create component directory
   file:
-    path: "{{ component_path | dirname }}"
+    path: "{{ component_dir }}"
     state: directory
     recurse: true
 
 - name: "create {{ component_class }} component"
   template:
     src: component.jsx.j2
-    dest: "{{ component_path }}"
+    dest: "{{ component_filepath }}"
     force: "{{ component_force }}"
-
-- name: add import line to imports/ui/index.js
-  lineinfile:
-    dest: "{{ qb_dir }}/imports/ui/index.js"
-    line: "export * from './{{ component_dir }}/{{ component_class }}.jsx';"
-    create: true
-  when: component_index_import
-
-- name: create styles directory
-  file:
-    path: "{{ component_style_path | dirname }}"
-    state: directory
-    recurse: true
-
-- name: create a stylesheet for it
-  template:
-    src: style.import.less.j2
-    dest: "{{ component_style_path }}"
-    force: "{{ component_force }}"
-  when: component_stylesheet
-
-- name: add import line to client/styles/index.less
-  lineinfile:
-    dest: "{{ qb_dir }}/client/styles/index.less"
-    line: '@import "/imports/ui/{{ component_dir }}/{{ component_class }}.import.less";'
-    create: true
-  when: component_stylesheet
 
 - name: create a blaze wrapper for it
   template:
     src: wrapper.html.j2
-    dest: "{{ qb_dir }}/imports/ui/{{ component_dir }}/{{ component_class }}.html"
+    dest: "{{ component_dir }}/{{ component_class }}.html"
     force: "{{ component_force }}"
   when: component_blaze
-    
+
+- include: less.yml
+  when: component_less
+
+- include: import.yml
+  when: component_import

@@ -1,0 +1,75 @@
+# included when `component_less` is true
+- name: set the less filepath
+  set_fact:
+    component_less_filepath: "{{ component_dir }}/{{ component_class }}.import.less"
+
+- name: "create {{ component_less_filepath }}"
+  template:
+    src: style.import.less.j2
+    dest: "{{ component_less_filepath }}"
+    force: "{{ component_force }}"
+
+- name: set component_less_imports variable
+  vars.rb:
+    vars:
+      dir: "{{ qb_dir }}"
+      elements: "{{ component_name_elements }}"
+    
+    # if the input is 
+    # 
+    #     dir: /Users/nrser/dev/gh/beiarea/wall/meteor
+    #     elements: ['posts', 'wall', 'Overlay']
+    # 
+    # then we want the output to be
+    # 
+    #     [
+    #         {
+    #             "dest": "/Users/nrser/dev/gh/beiarea/wall/meteor/imports/ui/index.import.less",
+    #             "line": "@import \"./posts/index.import.less\";"
+    #         },
+    #         {
+    #             "dest": "/Users/nrser/dev/gh/beiarea/wall/meteor/imports/ui/posts/index.import.less",
+    #             "line": "@import \"./wall/index.import.less\";"
+    #         },
+    #         {
+    #             "dest": "/Users/nrser/dev/gh/beiarea/wall/meteor/imports/ui/posts/wall/index.import.less",
+    #             "line": "@import \"./Overlay.import.less\";"
+    #         }
+    #     ]
+    # 
+    src: |
+      namespace = elements[0...-1]
+      class_name = elements[-1]
+      
+      $prefix = [dir, 'imports', 'ui']
+      index_filename = "index.import.less"
+      $imports = []
+      
+      def to_path *paths
+        File.join paths.map {|_| [*_] }.flatten
+      end
+      
+      def add dest_rel_path, line_rel_path
+        $imports << {
+          dest: to_path($prefix, dest_rel_path),
+          line: %Q(@import "#{ to_path '.', line_rel_path }";),
+        }
+      end
+      
+      namespace.each_with_index {|item, index|
+        add [namespace[0...index], index_filename],
+            [item, index_filename]
+      }
+      
+      add [namespace, index_filename],
+          "#{ class_name }.import.less"
+      
+      {component_less_imports: $imports}
+  
+- name: add less import lines
+  lineinfile:
+    dest: "{{ item.dest }}"
+    line: "{{ item.line }}"
+    create: true
+  with_items: "{{ component_less_imports }}"
+  

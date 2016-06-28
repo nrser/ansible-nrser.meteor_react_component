@@ -4,6 +4,6 @@ component_data: false
 component_root: div
 component_blaze: false
 component_force: false
-component_index_import: true
+component_import: true
 component_default: false
-component_stylesheet: true
+component_less: true
