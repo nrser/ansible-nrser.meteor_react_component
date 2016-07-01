@@ -17,7 +17,7 @@
 
 - name: set logger name
   set_fact:
-    component_logger_name: "imports:ui:{{ component_dir | regex_replace('/', ':')}}:{{ component_class }}"
+    component_logger_name: "imports:ui:{{ component_name_elements | join(':') }}"
 
 - name: set the css class name
   set_fact:
