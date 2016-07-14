@@ -21,7 +21,7 @@
 
 - name: set the css class name
   set_fact:
-    component_css_class: "{{ component_name_elements | join(' ') }}"
+    component_css_class: "{{ component_name_elements | join('-') }}"
 
 - name: create component directory
   file:
