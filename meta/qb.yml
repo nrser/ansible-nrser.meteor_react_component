@@ -32,22 +32,15 @@ vars:
   type: boolean
   short: m
 
-- name: container
-  description: create a data container
+- name: tracker
+  description: create a container that composes with tracker
   type: boolean
-  short: c
+  short: t
 
-- name: root
+- name: element
   description: root element name
   type: string
-  short: r
-
-- name: blaze
-  description: >
-    register class name as a global Blaze template helper and create
-    a .html template for the component.
-  type: boolean
-  short: b
+  short: e
 
 - name: force
   description: overwrite existing file
@@ -62,4 +55,14 @@ vars:
   description: >
     generate a .import.less file and add include statements for it.
   type: boolean
+
+- name: redux
+  description: create a container that composes with redux
+  type: boolean
+  short: r
+
+- name: scope
+  description: create a container that composes with redux-scope
+  type: boolean
+  short: s
   

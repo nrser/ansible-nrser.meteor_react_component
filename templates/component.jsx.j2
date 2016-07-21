@@ -6,23 +6,28 @@ import * as util from 'meteor/nrser:util';
 
 // react imports
 import React, { PropTypes } from 'react';
-import { BaseComponent } from '/imports/ui/lib/BaseComponent.jsx';
 {% if component_data -%}
 import { ReactMeteorData } from 'meteor/react-meteor-data';
 import reactMixin from 'react-mixin';  
 {% endif %}
 
-{% if component_blaze -%}
-// blaze imports
-import { Template } from 'meteor/templating';
-import './{{ component_class }}.html';
-{% endif %}
-
 // other package imports
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 // project imports
+import { BaseComponent } from '/imports/ui/lib/BaseComponent.jsx';
 import * as ui from '/imports/ui';
 import { } from '/imports/collections';
+import { store, actions } from '/imports/api/redux';
+{% if component_redux or component_scope or component_tracker -%}
+import {
+  compose,
+  composeAll,
+  composeWithTracker,
+  composeWithRedux,
+  composeWithScope
+} from '/imports/ui/lib/compose.js';
+{% endif %}
 
 const log = util.logger('{{ component_logger_name }}');
 const ns = util.logger('{{ component_css_class }}')
@@ -62,8 +67,8 @@ export class {{ component_class }} extends BaseComponent {
   
   render() {
     return (
-      <{{ component_root }} className={ ns("&") }>
-      </{{ component_root }}>
+      <{{ component_element }} className={ ns("&") }>
+      </{{ component_element }}>
     );
   } // render()
   
@@ -77,7 +82,22 @@ export class {{ component_class }} extends BaseComponent {
 reactMixin({{ component_class}}.prototype, ReactMeteorData);
 {% endif %}
 
-{% if component_blaze -%}
-// register component globally to be used by Blaze
-Template.registerHelper('{{ component_class }}', () => {{ component_class }});
+{% if component_tracker or component_redux or component_scope -%}
+export const {{ component_class }}Container = composeAll(
+  {% if component_tracker -%}
+  composeWithTracker(function(props, onData) {
+    onData(null, {});
+  }),
+  {% endif %}
+  {% if component_scope -%}
+  composerWithScope(function(props, onData, state) {
+    onData(null, {});
+  }),
+  {% endif %}
+  {% if component_redux -%}
+  composeWithRedux(function(props, onData, state) {
+    onData(null, {});
+  }),
+  {% endif %}
+);
 {% endif %}
