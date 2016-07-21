@@ -8,3 +8,4 @@ component_default: false
 component_less: true
 component_redux: false
 component_scope: false
+component_tracker: false

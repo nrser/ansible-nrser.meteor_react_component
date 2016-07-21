@@ -35,13 +35,6 @@
     dest: "{{ component_filepath }}"
     force: "{{ component_force }}"
 
-- name: create a blaze wrapper for it
-  template:
-    src: wrapper.html.j2
-    dest: "{{ component_dir }}/{{ component_class }}.html"
-    force: "{{ component_force }}"
-  when: component_blaze
-
 - include: less.yml
   when: component_less
 
