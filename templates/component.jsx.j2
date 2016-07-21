@@ -30,7 +30,7 @@ import {
 {% endif %}
 
 const log = util.logger('{{ component_logger_name }}');
-const ns = util.logger('{{ component_css_class }}')
+const ns = util.cssNamespacer('{{ component_css_class }}')
 
 export class {{ component_class }} extends BaseComponent {
   static propTypes = {
